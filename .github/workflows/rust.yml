@@ -123,13 +123,16 @@ jobs:
       - name: Build (release)
         run: |
           cargo build --release -p "${RFVP_CARGO_PKG}" --verbose
+          cargo build --release -p disassembler --verbose
+          cargo build --release -p assembler --verbose
+          ls -R
 
       - name: Package artifact (tar.gz)
         run: |
           mkdir -p dist/linux
           BIN="target/release/${RFVP_CARGO_PKG}"
           test -f "$BIN"
-          tar -C "target/release" -czf "dist/linux/${RFVP_CARGO_PKG}-linux-aarch64.tar.gz" "${RFVP_CARGO_PKG}"
+          tar -C "target/release" -czf "dist/linux/${RFVP_CARGO_PKG}-linux-aarch64.tar.gz" "${RFVP_CARGO_PKG}" disassembler assembler
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
